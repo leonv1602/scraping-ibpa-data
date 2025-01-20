@@ -43,7 +43,8 @@ dict_month_number = {"Januari": "01",
                      "November": "11", 
                      "Desember": "12",}
 
-sub_path = f'/workspaces/NSS-Model/Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}'
+sub_path = os.path.join(base_path, f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}')
+
 try:
     os.makedirs(sub_path)
     print(f"Folder {sub_path} created!")
