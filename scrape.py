@@ -43,7 +43,7 @@ dict_month_number = {"Januari": "01",
                      "November": "11", 
                      "Desember": "12",}
 
-sub_path = os.path.join(base_path, f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}')
+sub_path =  f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}'
 
 try:
     os.makedirs(sub_path)
@@ -73,12 +73,12 @@ except FileExistsError:
     print(f"Folder {sub_path_pdf} already exists")
 
 # Save as PDF
-HTML(url).write_pdf(f'Scrape PHEI/{clean_date.split("-")[2]}-{clean_date.split("-")[1]}/pdf/{clean_date}.pdf')
+HTML(url).write_pdf(f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/pdf/{clean_date}.pdf')
 
 # Save image from Website
 img_location_url = text_find[re.search('ChartPic', text_find).start():re.search('ChartPic', text_find).start()+200].split(' ')[0][:-1]
 imgURL = "https://www.phei.co.id/"+img_location_url
-urllib.request.urlretrieve(imgURL,f'Scrape PHEI/{clean_date.split("-")[2]}-{clean_date.split("-")[1]}/image/{clean_date}.jpeg')
+urllib.request.urlretrieve(imgURL,f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/image/{clean_date}.jpeg')
 
 def prepare_data(df, type_df):
     copy_df = df.copy()
@@ -96,7 +96,7 @@ bond_data = pd.concat((sbn_data,
 
 bond_data.iloc[:,1] /= 100
 bond_data.iloc[:,2:-1] /= 10000
-bond_data.to_excel(f'Scrape PHEI/{clean_date.split("-")[2]}-{clean_date.split("-")[1]}/Bond-Data-{clean_date}.xlsx', 
+bond_data.to_excel(f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Bond-Data-{clean_date}.xlsx', 
             sheet_name=clean_date)
 
 df = pd.concat((df_list[0],df_list[1]), axis = 0)[['Tenor Year', 'Today']]
@@ -121,7 +121,7 @@ plt.plot(df.index, df['Spot-Rate'], label = 'Spot Rate')
 plt.legend()
 plt.title(f'YCB and ZCB IDR {clean_date}')
 plt.grid()
-plt.savefig(f'Scrape PHEI/{clean_date.split("-")[2]}-{clean_date.split("-")[1]}/py-image/{clean_date}.jpeg')
+plt.savefig(f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/py-image/{clean_date}.jpeg')
 
-df.to_excel(f'Scrape PHEI/{clean_date.split("-")[2]}-{clean_date.split("-")[1]}/Yield-Curve-{clean_date}.xlsx', 
+df.to_excel(f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Yield-Curve-{clean_date}.xlsx', 
             sheet_name=clean_date)
