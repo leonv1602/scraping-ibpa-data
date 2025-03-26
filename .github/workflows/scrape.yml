@@ -3,7 +3,12 @@ name: Run Python Script
 on: 
   schedule:
     - cron: '0 10 * * 1-5'
-
+  workflow_dispatch:
+  # Add other triggers if necessary, e.g., push, pull_request
+  push:
+    branches:
+      - main
+      
 jobs:
   build:
     runs-on: ubuntu-latest
