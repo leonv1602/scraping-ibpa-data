@@ -13,9 +13,6 @@ import matplotlib.pyplot as plt
 import re
 import urllib.request
 
-# %%
-!pip3 freeze > requirements.txt  # Python3
-
 # %% [markdown]
 # # Initialization
 
