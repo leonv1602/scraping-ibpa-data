@@ -2,6 +2,7 @@
 # # Import Packages
 
 # %%
+
 # Import requests and BeautifulSoup libraries
 import requests
 from bs4 import BeautifulSoup
@@ -12,6 +13,7 @@ import openpyxl
 import matplotlib.pyplot as plt
 import re
 import urllib.request
+import pdfkit
 
 # %% [markdown]
 # # Initialization
@@ -55,7 +57,7 @@ dict_month_number = {"Januari": "01",
                      "Desember": "12",}
 
 # %%
-sub_path = f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}'
+sub_path = f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}'
 try:
     os.makedirs(sub_path)
     print(f"Folder {sub_path} created!")
@@ -75,6 +77,20 @@ try:
     print(f"Folder {sub_path_py_image} created!")
 except FileExistsError:
     print(f"Folder {sub_path_py_image} already exists")
+    
+sub_path_pdf_image = sub_path+'/pdf'
+try:
+    os.makedirs(sub_path_pdf_image)
+    print(f"Folder {sub_path_pdf_image} created!")
+except FileExistsError:
+    print(f"Folder {sub_path_pdf_image} already exists")
+
+# %% [markdown]
+# # Saving URL as PDF
+
+# %%
+pdf_path = f'{sub_path_pdf_image}/{clean_date}.pdf'
+urllib.request.urlretrieve(url, pdf_path)
 
 # %% [markdown]
 # # Saving Image as PDF
@@ -83,7 +99,7 @@ except FileExistsError:
 # Save image from Website
 img_location_url = text_find[re.search('ChartPic', text_find).start():re.search('ChartPic', text_find).start()+200].split(' ')[0][:-1]
 imgURL = "https://www.phei.co.id/"+img_location_url
-urllib.request.urlretrieve(imgURL,f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/image/{clean_date}.jpeg')
+urllib.request.urlretrieve(imgURL,f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/image/{clean_date}.jpeg')
 
 
 # %%
@@ -111,7 +127,7 @@ bond_data.iloc[:,2:-1] /= 10000
 bond_data
 
 # %%
-bond_data.to_excel(f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Bond-Data-{clean_date}.xlsx', 
+bond_data.to_excel(f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Bond-Data-{clean_date}.xlsx', 
             sheet_name=clean_date)
 
 # %% [markdown]
@@ -145,11 +161,11 @@ plt.ylabel('Rate')
 plt.legend()
 plt.title(f'YCB and ZCB IDR {clean_date}')
 plt.grid()
-plt.savefig(f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/py-image/{clean_date}.jpeg')
+plt.savefig(f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/py-image/{clean_date}.jpeg')
 plt.show()
 
 # %%
-df.to_excel(f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Yield-Curve-{clean_date}.xlsx', 
+df.to_excel(f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Yield-Curve-{clean_date}.xlsx', 
             sheet_name=clean_date)
 
 # %% [markdown]
@@ -169,11 +185,11 @@ plt.xlabel('Tenor Year')
 plt.ylabel('Rate')
 plt.title(f'Corporate Bond IDR {clean_date}')
 plt.grid()
-plt.savefig(f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/py-image/Corporate Bond IDR-{clean_date}.jpeg')
+plt.savefig(f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/py-image/Corporate Bond IDR-{clean_date}.jpeg')
 plt.show()
 
 # %%
-corporate_bond.to_excel(f'Scrape PHEI/{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Corporate-Bond-{clean_date}.xlsx', 
+corporate_bond.to_excel(f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Corporate-Bond-{clean_date}.xlsx', 
             sheet_name=clean_date)
 
 
