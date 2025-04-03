@@ -89,7 +89,7 @@ except FileExistsError:
 # # Saving URL as PDF
 
 # %%
-pdf_path = f'Scrape PHEI/{sub_path_pdf_image}/{clean_date}.pdf'
+pdf_path = f'{sub_path_pdf_image}/{clean_date}.pdf'
 urllib.request.urlretrieve(url, pdf_path)
 
 # %% [markdown]
