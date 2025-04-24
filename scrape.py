@@ -14,7 +14,7 @@ import urllib.request
 from weasyprint import HTML
 
 # %%
-pip freeze > requirements.txt
+#pip freeze > requirements.txt
 
 # %% [markdown]
 # # Initialization
