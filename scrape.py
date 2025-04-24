@@ -11,6 +11,7 @@ import openpyxl
 import matplotlib.pyplot as plt
 import re
 import urllib.request
+import weasyprint
 from weasyprint import HTML
 
 # %%
