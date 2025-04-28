@@ -2,8 +2,6 @@
 # # Import Packages
 
 # %%
-
-# Import requests and BeautifulSoup libraries
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -13,7 +11,11 @@ import openpyxl
 import matplotlib.pyplot as plt
 import re
 import urllib.request
-import pdfkit
+import weasyprint
+from weasyprint import HTML
+
+# %%
+#pip freeze > requirements.txt
 
 # %% [markdown]
 # # Initialization
@@ -89,8 +91,8 @@ except FileExistsError:
 # # Saving URL as PDF
 
 # %%
-pdf_path = f'{sub_path_pdf_image}/{clean_date}.pdf'
-urllib.request.urlretrieve(url, pdf_path)
+pdf_path = f'Scrape PHEI/{sub_path_pdf_image}/{clean_date}.pdf'
+HTML(url).write_pdf(pdf_path)
 
 # %% [markdown]
 # # Saving Image as PDF
@@ -99,7 +101,7 @@ urllib.request.urlretrieve(url, pdf_path)
 # Save image from Website
 img_location_url = text_find[re.search('ChartPic', text_find).start():re.search('ChartPic', text_find).start()+200].split(' ')[0][:-1]
 imgURL = "https://www.phei.co.id/"+img_location_url
-urllib.request.urlretrieve(imgURL,f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/image/{clean_date}.jpeg')
+urllib.request.urlretrieve(imgURL,f'Scrape PHEI/{sub_path_image}/{clean_date}.jpeg')
 
 
 # %%
@@ -127,7 +129,7 @@ bond_data.iloc[:,2:-1] /= 10000
 bond_data
 
 # %%
-bond_data.to_excel(f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Bond-Data-{clean_date}.xlsx', 
+bond_data.to_excel(f'Scrape PHEI/{sub_path}/Bond-Data-{clean_date}.xlsx', 
             sheet_name=clean_date)
 
 # %% [markdown]
@@ -161,11 +163,11 @@ plt.ylabel('Rate')
 plt.legend()
 plt.title(f'YCB and ZCB IDR {clean_date}')
 plt.grid()
-plt.savefig(f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/py-image/{clean_date}.jpeg')
+plt.savefig(f'Scrape PHEI/{sub_path_py_image}/{clean_date}.jpeg')
 plt.show()
 
 # %%
-df.to_excel(f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Yield-Curve-{clean_date}.xlsx', 
+df.to_excel(f'Scrape PHEI/{sub_path}/Yield-Curve-{clean_date}.xlsx', 
             sheet_name=clean_date)
 
 # %% [markdown]
@@ -177,7 +179,6 @@ corporate_bond.iloc[:,0] /= 10
 corporate_bond.iloc[:,1:] /= 1e6
 corporate_bond
 
-
 # %%
 plt.plot(corporate_bond.iloc[:,0], corporate_bond.iloc[:,1:], label = corporate_bond.columns[1:])
 plt.legend()
@@ -185,11 +186,11 @@ plt.xlabel('Tenor Year')
 plt.ylabel('Rate')
 plt.title(f'Corporate Bond IDR {clean_date}')
 plt.grid()
-plt.savefig(f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/py-image/Corporate Bond IDR-{clean_date}.jpeg')
+plt.savefig(f'Scrape PHEI/{sub_path_py_image}/Corporate Bond IDR-{clean_date}.jpeg')
 plt.show()
 
 # %%
-corporate_bond.to_excel(f'{clean_date.split("-")[2]}-{dict_month_number.get(clean_date.split("-")[1])}-{clean_date.split("-")[1]}/Corporate-Bond-{clean_date}.xlsx', 
+corporate_bond.to_excel(f'Scrape PHEI/{sub_path}/Corporate-Bond-{clean_date}.xlsx', 
             sheet_name=clean_date)
 
 
