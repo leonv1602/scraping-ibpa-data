@@ -8,20 +8,14 @@ attrs==25.3.0
 babel==2.17.0
 beautifulsoup4==4.13.3
 bleach==6.2.0
-<<<<<<< HEAD
-=======
 Brotli==1.1.0
->>>>>>> 8b9603bae44f0dea8746661e2b0216535c9d1bc9
 certifi==2025.1.31
 cffi==1.17.1
 charset-normalizer==3.4.1
 colorama==0.4.6
 comm==0.2.2
 contourpy==1.3.1
-<<<<<<< HEAD
-=======
 cssselect2==0.8.0
->>>>>>> 8b9603bae44f0dea8746661e2b0216535c9d1bc9
 cycler==0.12.1
 debugpy==1.8.13
 decorator==5.2.1
@@ -62,10 +56,7 @@ jupyterlab_git==0.51.0
 jupyterlab_pygments==0.3.0
 jupyterlab_server==2.27.3
 kiwisolver==1.4.8
-<<<<<<< HEAD
-=======
 lxml==5.4.0
->>>>>>> 8b9603bae44f0dea8746661e2b0216535c9d1bc9
 MarkupSafe==3.0.2
 matplotlib==3.10.1
 matplotlib-inline==0.1.7
@@ -97,15 +88,10 @@ psutil==7.0.0
 ptyprocess==0.7.0
 pure_eval==0.2.3
 pycparser==2.22
-<<<<<<< HEAD
-Pygments==2.19.1
-pyparsing==3.2.1
-=======
 pydyf==0.11.0
 Pygments==2.19.1
 pyparsing==3.2.1
 pyphen==0.17.2
->>>>>>> 8b9603bae44f0dea8746661e2b0216535c9d1bc9
 python-dateutil==2.9.0.post0
 python-json-logger==3.3.0
 pytz==2025.1
@@ -130,10 +116,7 @@ sympy==1.13.1
 terminado==0.18.1
 threadpoolctl==3.6.0
 tinycss2==1.4.0
-<<<<<<< HEAD
-=======
 tinyhtml5==2.0.0
->>>>>>> 8b9603bae44f0dea8746661e2b0216535c9d1bc9
 torch==2.6.0+cpu
 tornado==6.4.2
 traitlets==5.14.3
@@ -143,15 +126,9 @@ tzdata==2025.1
 uri-template==1.3.0
 urllib3==2.3.0
 wcwidth==0.2.13
-<<<<<<< HEAD
-webcolors==24.11.1
-webencodings==0.5.1
-websocket-client==1.8.0
-=======
 weasyprint==65.1
 webcolors==24.11.1
 webencodings==0.5.1
 websocket-client==1.8.0
 wkhtmltopdf==0.2
 zopfli==0.2.3.post1
->>>>>>> 8b9603bae44f0dea8746661e2b0216535c9d1bc9
