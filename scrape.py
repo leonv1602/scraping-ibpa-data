@@ -88,13 +88,6 @@ except FileExistsError:
     print(f"Folder {sub_path_pdf_image} already exists")
 
 # %% [markdown]
-# # Saving URL as PDF
-
-# %%
-pdf_path = f'Scrape PHEI/{sub_path_pdf_image}/{clean_date}.pdf'
-HTML(url).write_pdf(pdf_path)
-
-# %% [markdown]
 # # Saving Image as PDF
 
 # %%
@@ -103,6 +96,12 @@ img_location_url = text_find[re.search('ChartPic', text_find).start():re.search(
 imgURL = "https://www.phei.co.id/"+img_location_url
 urllib.request.urlretrieve(imgURL,f'Scrape PHEI/{sub_path_image}/{clean_date}.jpeg')
 
+# %% [markdown]
+# # Saving URL as PDF
+
+# %%
+pdf_path = f'Scrape PHEI/{sub_path_pdf_image}/{clean_date}.pdf'
+HTML(url).write_pdf(pdf_path)
 
 # %%
 def prepare_data(df, type_df):
