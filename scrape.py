@@ -94,13 +94,13 @@ except FileExistsError:
 # Save image from Website
 img_location_url = text_find[re.search('ChartPic', text_find).start():re.search('ChartPic', text_find).start()+200].split(' ')[0][:-1]
 imgURL = "https://www.phei.co.id/"+img_location_url
-urllib.request.urlretrieve(imgURL,f'Scrape PHEI/{sub_path_image}/{clean_date}.jpeg')
+urllib.request.urlretrieve(imgURL,f'{sub_path_image}/{clean_date}.jpeg')
 
 # %% [markdown]
 # # Saving URL as PDF
 
 # %%
-pdf_path = f'Scrape PHEI/{sub_path_pdf_image}/{clean_date}.pdf'
+pdf_path = f'{sub_path_pdf_image}/{clean_date}.pdf'
 HTML(url).write_pdf(pdf_path)
 
 # %%
