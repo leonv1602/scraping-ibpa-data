@@ -128,7 +128,7 @@ bond_data.iloc[:,2:-1] /= 10000
 bond_data
 
 # %%
-bond_data.to_excel(f'Scrape PHEI/{sub_path}/Bond-Data-{clean_date}.xlsx', 
+bond_data.to_excel(f'{sub_path}/Bond-Data-{clean_date}.xlsx', 
             sheet_name=clean_date)
 
 # %% [markdown]
@@ -166,7 +166,7 @@ plt.savefig(f'Scrape PHEI/{sub_path_py_image}/{clean_date}.jpeg')
 plt.show()
 
 # %%
-df.to_excel(f'Scrape PHEI/{sub_path}/Yield-Curve-{clean_date}.xlsx', 
+df.to_excel(f'{sub_path}/Yield-Curve-{clean_date}.xlsx', 
             sheet_name=clean_date)
 
 # %% [markdown]
@@ -185,7 +185,7 @@ plt.xlabel('Tenor Year')
 plt.ylabel('Rate')
 plt.title(f'Corporate Bond IDR {clean_date}')
 plt.grid()
-plt.savefig(f'Scrape PHEI/{sub_path_py_image}/Corporate Bond IDR-{clean_date}.jpeg')
+plt.savefig(f'{sub_path_py_image}/Corporate Bond IDR-{clean_date}.jpeg')
 plt.show()
 
 # %%
