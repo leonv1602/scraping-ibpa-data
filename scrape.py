@@ -162,7 +162,7 @@ plt.ylabel('Rate')
 plt.legend()
 plt.title(f'YCB and ZCB IDR {clean_date}')
 plt.grid()
-plt.savefig(f'Scrape PHEI/{sub_path_py_image}/{clean_date}.jpeg')
+plt.savefig(f'{sub_path_py_image}/{clean_date}.jpeg')
 plt.show()
 
 # %%
@@ -189,7 +189,7 @@ plt.savefig(f'{sub_path_py_image}/Corporate Bond IDR-{clean_date}.jpeg')
 plt.show()
 
 # %%
-corporate_bond.to_excel(f'Scrape PHEI/{sub_path}/Corporate-Bond-{clean_date}.xlsx', 
+corporate_bond.to_excel(f'{sub_path}/Corporate-Bond-{clean_date}.xlsx', 
             sheet_name=clean_date)
 
 
