@@ -1,0 +1,205 @@
+{
+  "metadata": {
+    "date": "10-Juli-2025",
+    "formatted_date": "2025-07-10",
+    "scrape_timestamp": "2025-07-10T22:28:36.990284",
+    "source_url": "https://www.phei.co.id/Data/HPW-dan-Imbal-Hasil",
+    "tenor_count": 31,
+    "status": "success"
+  },
+  "yield_curve": [
+    {
+      "Tenor Year": 0.1,
+      "IBPA_Yield": 0.057596,
+      "Spot_Rate": 0.057596,
+      "Forward_Rate": NaN
+    },
+    {
+      "Tenor Year": 1.0,
+      "IBPA_Yield": 0.05863,
+      "Spot_Rate": 0.05863,
+      "Forward_Rate": 0.058744951273933976
+    },
+    {
+      "Tenor Year": 2.0,
+      "IBPA_Yield": 0.059701,
+      "Spot_Rate": -0.02545093050385394,
+      "Forward_Rate": -0.10285379324617272
+    },
+    {
+      "Tenor Year": 3.0,
+      "IBPA_Yield": 0.060729,
+      "Spot_Rate": -0.05728928669032951,
+      "Forward_Rate": -0.11787951929460905
+    },
+    {
+      "Tenor Year": 4.0,
+      "IBPA_Yield": 0.061716,
+      "Spot_Rate": -0.07805125953176328,
+      "Forward_Rate": -0.13763370598183433
+    },
+    {
+      "Tenor Year": 5.0,
+      "IBPA_Yield": 0.062656,
+      "Spot_Rate": -0.09618873402703898,
+      "Forward_Rate": -0.1652399601498511
+    },
+    {
+      "Tenor Year": 6.0,
+      "IBPA_Yield": 0.063538,
+      "Spot_Rate": -0.11572057860172813,
+      "Forward_Rate": -0.20722789942289088
+    },
+    {
+      "Tenor Year": 7.0,
+      "IBPA_Yield": 0.064357,
+      "Spot_Rate": -0.14132665128764044,
+      "Forward_Rate": -0.28012221006855353
+    },
+    {
+      "Tenor Year": 8.0,
+      "IBPA_Yield": 0.065107,
+      "Spot_Rate": -0.18592266769326904,
+      "Forward_Rate": -0.43955962887178757
+    },
+    {
+      "Tenor Year": 9.0,
+      "IBPA_Yield": 0.065786,
+      "Spot_Rate": NaN,
+      "Forward_Rate": NaN
+    },
+    {
+      "Tenor Year": 10.0,
+      "IBPA_Yield": 0.066394,
+      "Spot_Rate": 0.066394,
+      "Forward_Rate": 0.0
+    },
+    {
+      "Tenor Year": 11.0,
+      "IBPA_Yield": 0.066933,
+      "Spot_Rate": 0.066933,
+      "Forward_Rate": 0.07233800656262512
+    },
+    {
+      "Tenor Year": 12.0,
+      "IBPA_Yield": 0.067407,
+      "Spot_Rate": 0.067407,
+      "Forward_Rate": 0.07263491895964558
+    },
+    {
+      "Tenor Year": 13.0,
+      "IBPA_Yield": 0.067819,
+      "Spot_Rate": 0.067819,
+      "Forward_Rate": 0.07277542149272476
+    },
+    {
+      "Tenor Year": 14.0,
+      "IBPA_Yield": 0.068176,
+      "Spot_Rate": 0.068176,
+      "Forward_Rate": 0.0728278757974401
+    },
+    {
+      "Tenor Year": 15.0,
+      "IBPA_Yield": 0.068483,
+      "Spot_Rate": 0.068483,
+      "Forward_Rate": 0.0727902760748631
+    },
+    {
+      "Tenor Year": 16.0,
+      "IBPA_Yield": 0.068745,
+      "Spot_Rate": 0.068745,
+      "Forward_Rate": 0.07268271815129279
+    },
+    {
+      "Tenor Year": 17.0,
+      "IBPA_Yield": 0.068968,
+      "Spot_Rate": 0.068968,
+      "Forward_Rate": 0.07254233472437699
+    },
+    {
+      "Tenor Year": 18.0,
+      "IBPA_Yield": 0.069156,
+      "Spot_Rate": 0.069156,
+      "Forward_Rate": 0.07235706348887816
+    },
+    {
+      "Tenor Year": 19.0,
+      "IBPA_Yield": 0.069315,
+      "Spot_Rate": 0.069315,
+      "Forward_Rate": 0.07218104683347759
+    },
+    {
+      "Tenor Year": 20.0,
+      "IBPA_Yield": 0.069448,
+      "Spot_Rate": 0.069448,
+      "Forward_Rate": 0.07197814539633196
+    },
+    {
+      "Tenor Year": 21.0,
+      "IBPA_Yield": 0.069559,
+      "Spot_Rate": 0.069559,
+      "Forward_Rate": 0.07178142097944362
+    },
+    {
+      "Tenor Year": 22.0,
+      "IBPA_Yield": 0.069651,
+      "Spot_Rate": 0.069651,
+      "Forward_Rate": 0.07158482907688901
+    },
+    {
+      "Tenor Year": 23.0,
+      "IBPA_Yield": 0.069727,
+      "Spot_Rate": 0.069727,
+      "Forward_Rate": 0.07140036685242812
+    },
+    {
+      "Tenor Year": 24.0,
+      "IBPA_Yield": 0.069791,
+      "Spot_Rate": 0.069791,
+      "Forward_Rate": 0.07126405727175911
+    },
+    {
+      "Tenor Year": 25.0,
+      "IBPA_Yield": 0.069843,
+      "Spot_Rate": 0.069843,
+      "Forward_Rate": 0.0710917585616122
+    },
+    {
+      "Tenor Year": 26.0,
+      "IBPA_Yield": 0.069886,
+      "Spot_Rate": 0.069886,
+      "Forward_Rate": 0.07096156187521174
+    },
+    {
+      "Tenor Year": 27.0,
+      "IBPA_Yield": 0.069921,
+      "Spot_Rate": 0.069921,
+      "Forward_Rate": 0.0708314019981946
+    },
+    {
+      "Tenor Year": 28.0,
+      "IBPA_Yield": 0.06995,
+      "Spot_Rate": 0.06995,
+      "Forward_Rate": 0.07073329719268151
+    },
+    {
+      "Tenor Year": 29.0,
+      "IBPA_Yield": 0.069973,
+      "Spot_Rate": 0.069973,
+      "Forward_Rate": 0.07061720077158817
+    },
+    {
+      "Tenor Year": 30.0,
+      "IBPA_Yield": 0.069993,
+      "Spot_Rate": 0.069993,
+      "Forward_Rate": 0.07057316264929758
+    }
+  ],
+  "key_metrics": {
+    "Current 10Y Yield": "0.0664",
+    "Average Spot Rate": "0.0288",
+    "Average Forward Rate": "0.0015",
+    "Yield Range": "0.0124",
+    "Steepness (10Y-2Y)": "67bp"
+  }
+}
