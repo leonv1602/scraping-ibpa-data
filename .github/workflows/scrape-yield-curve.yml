@@ -1,0 +1,344 @@
+name: 🇮🇩 PHEI Yield Curve Data Scraper
+
+on:
+  schedule:
+    # Run daily at 9:00 AM Jakarta time (02:00 UTC)
+    - cron: '0 2 * * *'
+    # Run on weekdays at 2:00 PM Jakarta time (07:00 UTC) 
+    - cron: '0 7 * * 1-5'
+  
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: 'Enable debug logging'
+        type: boolean
+        default: false
+      timeout:
+        description: 'Request timeout (seconds)'
+        type: number
+        default: 30
+
+  push:
+    paths:
+      - 'scrape_yield_curve_github.py'
+      - '.github/workflows/scrape-yield-curve.yml'
+      - 'requirements.txt'
+
+env:
+  PYTHON_VERSION: '3.11'
+  TZ: 'Asia/Jakarta'
+
+jobs:
+  scrape-yield-curve:
+    name: 📊 Scrape PHEI Yield Curve Data
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    
+    steps:
+    - name: 🛒 Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+    
+    - name: 📦 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        echo "✅ Dependencies installed successfully"
+    
+    - name: 🕐 Set Jakarta Timezone
+      run: |
+        sudo timedatectl set-timezone Asia/Jakarta
+        echo "Current time in Jakarta: $(date)"
+        echo "UTC time: $(date -u)"
+    
+    - name: 🔍 Run Yield Curve Scraper
+      id: scraper
+      run: |
+        echo "🚀 Starting PHEI yield curve data scraping..."
+        
+        # Create debug flag
+        DEBUG_FLAG=""
+        if [ "${{ github.event.inputs.debug }}" = "true" ]; then
+          DEBUG_FLAG="--debug"
+        fi
+        
+        # Set timeout
+        TIMEOUT="${{ github.event.inputs.timeout || '30' }}"
+        
+        # Run scraper
+        python scrape_yield_curve_github.py \
+          --output-dir data \
+          --timeout "$TIMEOUT" \
+          $DEBUG_FLAG
+        
+        echo "✅ Scraping completed successfully"
+      
+    - name: 📋 Validate Output Data
+      run: |
+        echo "🔍 Validating scraped data..."
+        
+        # Check if data directory exists
+        if [ ! -d "data/daily" ]; then
+          echo "❌ Data directory not found"
+          exit 1
+        fi
+        
+        # Find the latest JSON file
+        LATEST_JSON=$(find data/daily -name "*.json" -type f -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)
+        
+        if [ -z "$LATEST_JSON" ]; then
+          echo "❌ No JSON output file found"
+          exit 1
+        fi
+        
+        echo "📄 Latest file: $LATEST_JSON"
+        
+        # Validate JSON structure
+        python -c "
+        import json
+        import sys
+        
+        try:
+            with open('$LATEST_JSON', 'r') as f:
+                data = json.load(f)
+            
+            # Check required fields
+            required_fields = ['metadata', 'yield_curve', 'key_metrics']
+            missing_fields = [field for field in required_fields if field not in data]
+            
+            if missing_fields:
+                print(f'❌ Missing required fields: {missing_fields}')
+                sys.exit(1)
+            
+            # Check data quality
+            yield_data = data['yield_curve']
+            if len(yield_data) < 3:
+                print(f'❌ Insufficient yield curve data: {len(yield_data)} points')
+                sys.exit(1)
+            
+            print(f'✅ Data validation passed: {len(yield_data)} tenor points')
+            print(f'📊 Date: {data[\"metadata\"][\"date\"]}')
+            print(f'🎯 Key metrics: {len(data[\"key_metrics\"])} indicators')
+            
+        except Exception as e:
+            print(f'❌ Data validation failed: {e}')
+            sys.exit(1)
+        "
+    
+    - name: 📊 Generate Data Summary
+      run: |
+        echo "📈 Generating data summary..."
+        
+        # Find latest files
+        LATEST_JSON=$(find data/daily -name "*.json" -type f -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)
+        LATEST_CSV=$(find data/daily -name "*.csv" -type f -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)
+        
+        echo "## 📊 PHEI Yield Curve Data Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
+        echo "| 🕐 Scrape Time | $(date '+%Y-%m-%d %H:%M:%S %Z') |" >> $GITHUB_STEP_SUMMARY
+        echo "| 📄 JSON File | \`$(basename "$LATEST_JSON")\` |" >> $GITHUB_STEP_SUMMARY
+        echo "| 📄 CSV File | \`$(basename "$LATEST_CSV")\` |" >> $GITHUB_STEP_SUMMARY
+        echo "| 📁 File Size | $(du -h "$LATEST_JSON" | cut -f1) (JSON) |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🔄 Workflow | [\`${{ github.workflow }}\`](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Add key metrics from JSON
+        python -c "
+        import json
+        
+        with open('$LATEST_JSON', 'r') as f:
+            data = json.load(f)
+        
+        print('### 🎯 Key Metrics')
+        print('')
+        for metric, value in data['key_metrics'].items():
+            print(f'- **{metric}**: {value}')
+        " >> $GITHUB_STEP_SUMMARY
+    
+    - name: 💾 Commit and Push Data
+      if: success()
+      run: |
+        echo "💾 Committing scraped data..."
+        
+        # Configure git
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Add data files
+        git add data/
+        
+        # Check if there are changes
+        if git diff --staged --quiet; then
+          echo "ℹ️ No changes to commit"
+        else
+          # Get the date from scraper output
+          DATE=$(cat data/daily/*.json | python -c "import sys, json; print(json.load(sys.stdin)['metadata']['formatted_date'])" 2>/dev/null || date +%Y-%m-%d)
+          
+          # Commit changes
+          git commit -m "📊 Update PHEI yield curve data - $DATE
+          
+          - Scraped at: $(date '+%Y-%m-%d %H:%M:%S %Z')
+          - Workflow: ${{ github.workflow }}
+          - Run ID: ${{ github.run_id }}
+          - Triggered by: ${{ github.event_name }}
+          
+          [skip ci]"
+          
+          # Push changes
+          git push
+          
+          echo "✅ Data committed and pushed successfully"
+        fi
+    
+    - name: 📤 Upload Artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: phei-yield-curve-data-${{ steps.scraper.outputs.date || github.run_number }}
+        path: |
+          data/
+          scraper.log
+        retention-days: 30
+    
+    - name: 📊 Update Repository Stats
+      if: success()
+      run: |
+        echo "📊 Updating repository statistics..."
+        
+        # Count total data files
+        TOTAL_FILES=$(find data -name "*.json" | wc -l)
+        TOTAL_SIZE=$(du -sh data | cut -f1)
+        
+        echo "### 📈 Repository Statistics" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **Total Data Files**: $TOTAL_FILES" >> $GITHUB_STEP_SUMMARY
+        echo "- **Total Data Size**: $TOTAL_SIZE" >> $GITHUB_STEP_SUMMARY
+        echo "- **Last Updated**: $(date '+%Y-%m-%d %H:%M:%S %Z')" >> $GITHUB_STEP_SUMMARY
+        echo "- **Repository**: [\`${{ github.repository }}\`](${{ github.server_url }}/${{ github.repository }})" >> $GITHUB_STEP_SUMMARY
+    
+    outputs:
+      scrape-status: ${{ steps.scraper.outputs.status || 'failed' }}
+      scrape-date: ${{ steps.scraper.outputs.date }}
+      tenor-count: ${{ steps.scraper.outputs.tenor_count }}
+      filename: ${{ steps.scraper.outputs.filename }}
+
+  # Optional: Deploy to GitHub Pages
+  deploy-pages:
+    name: 🌐 Deploy Data Dashboard
+    needs: scrape-yield-curve
+    runs-on: ubuntu-latest
+    if: success() && github.ref == 'refs/heads/main'
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+    - name: 🛒 Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        ref: main
+    
+    - name: 🏗️ Setup Pages
+      uses: actions/configure-pages@v4
+    
+    - name: 📄 Generate Dashboard
+      run: |
+        mkdir -p _site
+        
+        # Create simple dashboard
+        cat > _site/index.html << 'EOF'
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>PHEI Yield Curve Data</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+                body { font-family: Arial, sans-serif; margin: 40px; }
+                .header { background: #f5f5f5; padding: 20px; border-radius: 8px; }
+                .metric { display: inline-block; margin: 10px; padding: 15px; background: #e7f3ff; border-radius: 5px; }
+                .latest-data { margin: 20px 0; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>🇮🇩 PHEI Yield Curve Data Dashboard</h1>
+                <p>Indonesian Government Bond Yield Curve Data</p>
+                <p><strong>Last Updated:</strong> <span id="lastUpdate">-</span></p>
+            </div>
+            
+            <div class="latest-data">
+                <h2>📊 Latest Data</h2>
+                <div id="metrics"></div>
+                <div id="dataTable"></div>
+            </div>
+            
+            <script>
+                // Load and display latest data
+                fetch('data/daily/' + new Date().toISOString().split('T')[0] + '_yield_curve.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('lastUpdate').textContent = data.metadata.date;
+                        
+                        // Display metrics
+                        const metricsDiv = document.getElementById('metrics');
+                        for (const [key, value] of Object.entries(data.key_metrics)) {
+                            const metricDiv = document.createElement('div');
+                            metricDiv.className = 'metric';
+                            metricDiv.innerHTML = `<strong>${key}:</strong><br>${value}`;
+                            metricsDiv.appendChild(metricDiv);
+                        }
+                        
+                        // Display table
+                        const tableDiv = document.getElementById('dataTable');
+                        let tableHTML = '<table><tr><th>Tenor (Years)</th><th>IBPA Yield</th><th>Spot Rate</th><th>Forward Rate</th></tr>';
+                        data.yield_curve.forEach(row => {
+                            tableHTML += `<tr>
+                                <td>${row['Tenor Year']}</td>
+                                <td>${(row['IBPA_Yield'] * 100).toFixed(4)}%</td>
+                                <td>${(row['Spot_Rate'] * 100).toFixed(4)}%</td>
+                                <td>${row['Forward_Rate'] ? (row['Forward_Rate'] * 100).toFixed(4) + '%' : 'N/A'}</td>
+                            </tr>`;
+                        });
+                        tableHTML += '</table>';
+                        tableDiv.innerHTML = tableHTML;
+                    })
+                    .catch(error => {
+                        console.error('Error loading data:', error);
+                        document.getElementById('metrics').innerHTML = '<p>Error loading data</p>';
+                    });
+            </script>
+        </body>
+        </html>
+        EOF
+        
+        # Copy data directory
+        cp -r data _site/ 2>/dev/null || echo "No data directory found"
+    
+    - name: 📤 Upload Pages Artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '_site'
+    
+    - name: 🚀 Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
